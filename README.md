@@ -11,6 +11,6 @@ Out of the box, each HTML file has a text "the quick brown fox jumps over the la
 
 Image Customization
 All the images respond to the upcoming keystroke and are stored in the images and images_kp folder. To customize the images, simply replace the images with your custom made image ensuring that:
-1. the replacement image follows the original name as included
-2. the replacement image must be the same size, especially the keyboard, to ensure that the keyboard and hand movements are rendered properly
+1. The replacement image follows the original name as included
+2. The replacement image must be the same size, especially the keyboard, to ensure that the keyboard and hand movements are rendered properly
 
