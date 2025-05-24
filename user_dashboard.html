@@ -1,0 +1,81 @@
+<!-- 
+Copyright (c) 2025 Harold D. Lladoc. Licensed under the MIT License. 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touch Typing Software Development Framework</title>
+    <link rel="stylesheet" href="custom-styles.css">
+    <style>
+        @font-face {
+            font-family: 'Manifa';
+            src: url('fonts/Manifa.ttf') format('truetype');
+        }
+
+        body {
+            font-family: 'Manifa', serif; /* Updated font for the entire body */
+            margin-top: 60px; /* To prevent the content from overlapping the fixed top panel */
+        }
+
+        .top-panel {
+            width: 100%;
+            background-color: #00A3E0; /* Updated color */
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            height: 50px;
+        }
+        .top-panel img {
+            padding-right: 31.25px; /* Increased padding by 25% more */
+            height: 50px;
+        }
+        .top-panel div:first-child {
+            font-family: 'Manifa', serif; /* Ensure the title uses the custom font */
+            font-size: 1.75em; /* Larger font size for better visibility */
+        }
+
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-panel">
+        <div>Touch Typing Software Development Framework</div>
+    </div>
+
+    <div class="container">
+        <h1>Your Typing Software Name Goes Here</h>          
+        <p><a href="lessons.html">Go to Lessons</a></p>
+        <p><a href="speedtests.html">Go to Speed Tests</a></p>
+    </div>
+</body>
+</html>

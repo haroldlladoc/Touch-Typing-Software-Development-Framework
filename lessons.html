@@ -1,0 +1,164 @@
+<!-- 
+Copyright (c) 2025 Harold D. Lladoc. Licensed under the MIT License. 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lessons</title>
+    <style>
+        /* Import the custom font */
+        @font-face {
+            font-family: 'Manifa';
+            src: url('fonts/Manifa.ttf') format('truetype');
+        }
+
+        /* Enhanced Top Panel Styling */
+        .top-panel {
+            width: 100%;
+            background-color: #00843D;
+            padding: 2.5px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            font-family: 'Manifa', sans-serif;
+            border: none;
+            height: 87.5px;
+        }
+
+        /* Updated Home Button Styling */
+        .home-button {
+            position: absolute;
+            left: 10px;
+            font-size: 16px;
+            padding: 5px 10px;
+            text-decoration: none;
+            background-color: white;
+            color: black;
+            border-radius: 5px;
+        }
+
+        .user-name {
+            margin: auto;
+            text-align: center;
+            flex-grow: 1;
+            align-self: center;
+        }
+
+        .logo {
+            height: 60px;
+            padding-right: 30px;
+        }
+
+        /* Lessons Table Styling */
+        .lesson-table {
+            margin: 120px auto;
+            width: 80%;
+            border-collapse: collapse;
+            text-align: center;
+            background-color: #00843D; /* Table background color */
+            font-family: 'Manifa', sans-serif; /* Apply Manifa font */
+            font-size: 22.4px; /* 40% increase from original 16px */
+        }
+
+       .lesson-table td {
+    width: 50%;
+    border: 1px solid white; /* White border */
+    padding: 10px;
+    color: white; /* White text for contrast with blue background */
+    text-align: left; /* Align contents to the left */
+}
+
+
+        .lesson-table a {
+            text-decoration: none;
+            color: white; /* Link color to match the table style */
+            font-weight: bold;
+            font-size: 19.7px; /* 40% increase from original 16px */
+        }
+
+        .lesson-table a:hover {
+            color: #FFD700; /* Gold color on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Panel -->
+    <div class="top-panel">
+        <a href="user_dashboard.html" class="home-button">Home</a>
+        <div class="user-name">
+            <h1>Lessons Page</h1>
+        </div>
+    </div>
+
+    <!-- Lessons Table -->
+    <table class="lesson-table">
+        <tr>
+            <td><a href="lesson1.html">Lesson 1 - Home Row Keys</a></td>
+            <td><a href="lesson11.html">Lesson 11 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson2.html">Lesson 2 - </a></td>
+            <td><a href="lesson12.html">Lesson 12 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson3.html">Lesson 3 - </a></td>
+            <td><a href="lesson13.html">Lesson 13 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson4.html">Lesson 4 - </a></td>
+            <td><a href="lesson14.html">Lesson 14 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson5.html">Lesson 5 - </a></td>
+            <td><a href="lesson15.html">Lesson 15 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson6.html">Lesson 6 - </a></td>
+            <td><a href="lesson16.html">Lesson 16 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson7.html">Lesson 7 - </a></td>
+            <td><a href="lesson17.html">Lesson 17 - Numeric Keypad</a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson8.html">Lesson 8 - </a></td>
+            <td><a href="lesson18.html">Lesson 18 - Numeric Keypad</a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson9.html">Lesson 9 - </a></td>
+            <td><a href="lesson19.html">Lesson 19 - </a></td>
+        </tr>
+        <tr>
+            <td><a href="lesson10.html">Lesson 10 - </a></td>
+            <td><a href="lesson20.html">Lesson 20 - </a></td>
+        </tr>
+
+    </table>
+</body>
+</html>

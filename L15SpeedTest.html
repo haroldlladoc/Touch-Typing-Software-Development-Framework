@@ -1,0 +1,303 @@
+<!-- 
+Copyright (c) 2025 Harold D. Lladoc. Licensed under the MIT License. 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>L15 Speed Test</title>
+  <style>
+    body {
+      font-family: Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+    #content {
+      width: 70%;
+    }
+    #topPanel {
+      width: 100%;
+      background-color: #0033A0;
+      padding: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      color: white;
+      font-size: 19px;
+    }
+    #topPanel .button-container {
+      margin: 0;
+    }
+    #sidebar {
+      width: 30%;
+      padding-left: 20px;
+      padding-top: 80px;
+    }
+    #paragraphContainer {
+      padding-top: 80px;
+    }
+    #paragraph {
+      font-size: 34px;
+      text-align: left;
+      line-height: 1.5;
+      white-space: pre-line;
+      outline: none;
+      padding: 10px;
+    }
+    .correct {
+      color: green;
+      background-color: #ffffb3;
+    }
+    .incorrect {
+      color: red;
+      background-color: #ffe6e6;
+    }
+    .enter-key {
+      color: gray;
+      font-weight: bold;
+    }
+    .button-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    #results {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #timer {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    select {
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    /* Style for home, restart and start buttons */
+    .home-button, .restart-button, .start-button {
+      font-size: 16px;
+      padding: 5px 10px;
+      text-decoration: none;
+      background-color: white;
+      color: black;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    /* Specific style for the start button */
+    .start-button {
+      background-color: #00843D;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topPanel">
+    <div class="button-container">
+      
+      <a href="speedtests.html" class="home-button">Test Menu</a>
+    </div>
+    <div>L15 Speed Test</div>
+   
+    <div class="button-container">
+      <button class="restart-button" id="restartButton" onclick="restart()">Restart</button>
+    </div>
+  </div>
+  <div id="content">
+    <div id="paragraphContainer">
+      <div id="paragraph">
+       the quick brown fox jumps over the lazy dog
+      </div>
+    </div>
+  </div>
+  <div id="sidebar">
+    <div id="timer">Time Left: <span id="time">0:00</span></div>
+    <div>
+      <label for="timerDropdown">Set Timer:</label>
+      <select id="timerDropdown">
+        <option value="60">1 Minute</option>
+        <option value="180">3 Minutes</option>
+        <option value="300">5 Minutes</option>
+      </select>
+    </div>
+    <div class="button-container">
+      <button class="start-button" id="startButton" onclick="startTyping()">Start</button>
+    </div>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    document.addEventListener("keydown", function(event) {
+  if (event.code === "Space" || event.key === " ") {
+    event.preventDefault(); // Prevents scrolling
+    // Add your custom functionality here if needed
+  }
+});
+
+    const paragraph = "the quick brown fox jumps over the lazy dog";
+    const resultsDiv = document.getElementById("results");
+    const timerDiv = document.getElementById("timer");
+    const timeSpan = document.getElementById("time");
+    const restartButton = document.getElementById("restartButton");
+    const startButton = document.getElementById("startButton");
+    const timerDropdown = document.getElementById("timerDropdown");
+    let startTime, timer, timeLimit, selectedTime, totalTypedChars = 0, correctChars = 0, incorrectChars = 0;
+    let typedChars = [];
+
+  function checkTyping(event) {
+  const input = event.key;
+  const paragraphDiv = document.getElementById("paragraph");
+
+  if (input === "Backspace") {
+    if (totalTypedChars > 0) {
+      totalTypedChars--;
+      if (typedChars.pop() !== paragraph[totalTypedChars]) {
+        incorrectChars--;
+      } else {
+        correctChars--;
+      }
+    }
+  } else if (input.length === 1) {
+    if (totalTypedChars < paragraph.length) {
+      typedChars.push(input);
+      if (input === paragraph[totalTypedChars]) {
+        correctChars++;
+      } else {
+        incorrectChars++;
+      }
+      totalTypedChars++;
+    }
+  }
+
+  let formattedParagraph = "";
+  for (let i = 0; i < paragraph.length; i++) {
+    if (i < typedChars.length) {
+      if (typedChars[i] === paragraph[i]) {
+        formattedParagraph += `<span class="correct" id="char-${i}">${paragraph[i]}</span>`;
+      } else {
+        formattedParagraph += `<span class="incorrect" id="char-${i}">${paragraph[i]}</span>`;
+      }
+    } else {
+      formattedParagraph += `<span id="char-${i}">${paragraph[i]}</span>`;
+    }
+  }
+
+  paragraphDiv.innerHTML = formattedParagraph;
+
+  // Adjust scrolling logic: Scroll after every 2 lines of text (approximately 160 characters)
+  if (totalTypedChars > 0 && totalTypedChars % 160 === 0) {
+    const currentChar = document.getElementById(`char-${totalTypedChars}`);
+    if (currentChar) {
+      currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  if (!startTime) {
+    startTime = new Date();
+    timer = setInterval(updateTimer, 1000);
+  }
+
+  if (totalTypedChars === paragraph.length) {
+    finishTyping();
+  }
+}
+
+
+
+  function finishTyping() {
+  clearInterval(timer);
+  const endTime = new Date();
+  const timeDiff = (endTime - startTime) / 1000; // Time in seconds
+  const wordsTyped = totalTypedChars / 5;
+  const wpm = Math.round((wordsTyped / timeDiff) * 60);
+  const accuracy = Math.ceil((correctChars / (correctChars + incorrectChars)) * 100);
+
+  const date = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
+
+  resultsDiv.innerHTML = `Words Per Minute: ${wpm} WPM<br>Accuracy: ${accuracy}%<br>Date: ${date}<br>Time: ${time}<br>Timer Setting: ${selectedTime}`;
+  document.removeEventListener("keydown", checkTyping);
+  startButton.style.display = 'none';
+  timerDropdown.disabled = false;
+
+  // Scroll back to the top of the page
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+    function startTyping() {
+      selectedTime = timerDropdown.options[timerDropdown.selectedIndex].text;
+      timeLimit = parseInt(timerDropdown.value);
+      if (timeLimit) {
+        startButton.style.display = 'none';
+        document.addEventListener("keydown", checkTyping);
+        resultsDiv.innerHTML = "";
+        timeSpan.textContent = `${Math.floor(timeLimit / 60)}:${timeLimit % 60 < 10 ? '0' : ''}${timeLimit % 60}`;
+        timerDropdown.disabled = true;
+      }
+    }
+
+    function updateTimer() {
+      const currentTime = new Date();
+      const timePassed = Math.floor((currentTime - startTime) / 1000);
+      const timeLeft = timeLimit - timePassed;
+      if (timeLeft <= 0) {
+        finishTyping();
+      } else {
+        timeSpan.textContent = `${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`;
+      }
+    }
+
+    function restart() {
+      totalTypedChars = 0;
+      correctChars = 0;
+      incorrectChars = 0;
+      typedChars = [];
+      document.getElementById("paragraph").innerHTML = paragraph;
+      resultsDiv.innerHTML = "";
+      startButton.style.display = 'block';
+      timerDiv.style.display = 'block';
+      timeSpan.textContent = "0:00";
+      clearInterval(timer);
+      startTime = null;
+      timerDropdown.disabled = false;
+      document.removeEventListener("keydown", checkTyping);
+    }
+
+
+    window.onload = function() {
+      restart();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!-- 
+Copyright (c) 2025 Harold D. Lladoc. Licensed under the MIT License. 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 12</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .top-panel {
+      width: 100%;
+      background-color: #0033A0;
+      padding: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between; /* Space items across the width */
+      align-items: center;
+    }
+    .home-button {
+      position: absolute;
+      left: 10px;
+      font-size: 16px;
+      padding: 5px 10px;
+      text-decoration: none;
+      background-color: white;
+      color: black;
+      border-radius: 5px;
+    }
+    .lesson-title {
+      flex: 1;
+      text-align: center;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .user-name {
+      margin: 0;
+      padding: 0;
+      color: white;
+      font-size: 16px;
+    }
+.bottom-panel {
+  width: 100%;
+  background-color: #0033A0;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center; /* Center all buttons */
+  align-items: center; /* Align buttons vertically */
+  gap: 10px; /* Adds spacing between the buttons */
+}
+
+.bottom-menu-button, .bottom-panel button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.bottom-menu-button {
+  font-size: 16px;
+  padding: 10px 20px;
+  text-decoration: none; /* Removes the underline */
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+   
+    #paragraph {
+      font-size: 38px;
+      width: 60%;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1.5;
+      white-space: pre-line;
+      outline: none;
+      padding: 10px;
+    }
+    .correct {
+      color: green;
+      background-color: #ffffb3;
+    }
+    .incorrect {
+      color: red;
+      background-color: #ffe6e6;
+    }
+    .enter-key {
+      color: gray;
+      font-weight: bold;
+    }
+ #content {
+  margin-top: 80px;
+  margin-bottom: 160px; /* Increased margin to account for both panels */
+}
+
+.image-panel {
+  width: 100%;
+  background-color: white; /* Changed to white background */
+  padding: 10px;
+  position: fixed;
+  bottom: 120px; /* Adjusted to avoid overlapping the bottom panel */
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.image-panel img {
+  height: auto; /* Maintain aspect ratio */
+  max-width: 75%; /* Reduce the image size by 50% */
+  border-radius: 10px; /* Optional: Rounded corners */
+}
+
+.info-label {
+  font-size: 16px;
+  margin-left: 10px; /* Space between labels */
+  background-color: transparent; /* Ensure no background color */
+  color: white; /* Set text color to white */
+  border-radius: 5px;
+  padding: 5px 10px; /* Add padding for spacing around the text */
+  font-weight: bold;
+}
+
+  </style>
+</head>
+
+<body>
+
+
+<div class="top-panel">
+  <div style="display: flex; align-items: center;">
+  
+  </div>
+  <div class="lesson-title">Lesson 12 - 5, 7, 3, 6 and 2</div>
+  
+</div>
+
+ 
+  <div id="content">
+    <div id="paragraph" tabindex="-1"></div>
+    <div id="results"></div>
+  </div>
+ <div class="image-panel">
+  <img id="dynamic-image" src="images/l1homerowkey.png" alt="Home Row Keys">
+</div>
+
+
+<div class="bottom-panel">
+    <a href="lessons.html" class="bottom-menu-button">Lessons Page</a>
+    <button onclick="restart(); maintainFocus()">Restart Lesson</button>
+    <button onclick="previousLesson(); maintainFocus()">Previous Lesson</button>
+    <button onclick="nextLesson(); maintainFocus()">Next Lesson</button>
+    <button onclick="adjustFontSize(2); maintainFocus()">Increase Text Size</button>
+    <button onclick="adjustFontSize(-2); maintainFocus()">Decrease Text Size</button>
+    <button onclick="toggleImageVisibility()">Show/Hide Hand Positions</button>
+</div>
+
+
+
+<script>
+  const lessons = [
+    [
+      "the quick brown fox jumps over the lazy dog",
+      "the quick brown fox jumps over the lazy dog"
+    ]
+  ];
+
+  let currentLessonIndex = 0;
+  let currentLineIndex = 0;
+  let startTime = null;
+  let totalTypedChars = 0;
+  let correctChars = 0;
+  let currentFontSize = 34; // Adjusted default font size
+  let accuracyScores = [];
+  let wpmScores = [];
+  const paragraphDiv = document.getElementById("paragraph");
+  const resultsDiv = document.getElementById("results");
+  const dynamicImage = document.getElementById("dynamic-image");
+
+function showLine() {
+    const correctLine = lessons[currentLessonIndex][currentLineIndex];
+    let formattedText = '';
+    for (let i = 0; i < correctLine.length; i++) {
+        formattedText += `<span id="char${i}">${correctLine[i]}</span>`;
+    }
+    paragraphDiv.innerHTML = formattedText + ' <span class="enter-key">↵</span>';
+    paragraphDiv.style.fontSize = `${currentFontSize}px`;
+    paragraphDiv.focus();
+
+    // Immediately update the image to match the first character of the new line
+    if (correctLine.length > 0) {
+        updateImage(correctLine[0]); // Update image to the first character
+    } else {
+        dynamicImage.src = ""; // Clear the image if the line is empty
+    }
+}
+
+
+
+
+// Function to update the image for the next character
+function updateImage(char) {
+    const imageFolderPath = 'images/'; // Folder containing the image files
+    let sanitizedChar = char;
+
+    // Special handling for specific characters
+    if (char === ' ') {
+        sanitizedChar = 'space'; // Use "space.gif" for spaces
+    } else if (char === ',') {
+        sanitizedChar = 'comma'; // Use "comma.gif" for commas
+    } else if (char === ';') {
+        sanitizedChar = 'semicolon'; // Use "semicolon.gif" for semicolons
+    } else if (char === ':') {
+        sanitizedChar = 'colon'; // Use "colon.gif" for colons
+    } else if (char === '.') {
+        sanitizedChar = 'dot'; // Use "dot.gif" for periods
+    } else if (char === '↵' || char === 'Enter') {
+        sanitizedChar = 'enter'; // Use "enter.gif" for the Enter key
+    } else if (char === '?') {
+        sanitizedChar = 'shift_Question'; // Use "shift_Question.gif" for question marks
+    } else if (char === "'") {
+        sanitizedChar = 'apostrophe'; // Use "apostrophe.gif" for apostrophes
+    } else if (char === '"') {
+        sanitizedChar = 'double'; // Use "double.gif" for double quotes
+    } else if (char === '-') {
+        sanitizedChar = 'hypen'; // Use "hypen.gif" for hyphens
+    } else if (char === char.toUpperCase() && isNaN(char)) {
+        sanitizedChar = `shift_${char}`; // Use "shift_X.gif" for uppercase letters
+    }
+    // Construct the image path and update the source
+    const imagePath = `${imageFolderPath}${sanitizedChar}.gif`;
+    console.log(`Image path: ${imagePath}`); // Log the path for debugging
+    dynamicImage.src = imagePath; // Update the displayed image
+}
+
+
+
+// Listen for character updates during typing
+document.addEventListener("keydown", function (event) {
+    const correctLine = lessons[currentLessonIndex][currentLineIndex];
+    const input = event.key;
+
+    // Ignore non-character keys except for Backspace and Enter
+    if (input === "Shift" || input === "Control" || input === "Alt" || 
+        (input.length > 1 && input !== "Backspace" && input !== "Enter")) {
+        return; // Exit the function for ignored keys
+    }
+
+    // Clear the error message when the user continues typing
+    if (resultsDiv.innerHTML.includes("Please complete the passage")) {
+        resultsDiv.innerHTML = ""; // Clear the error message
+        resultsDiv.style.fontSize = ""; // Reset font size
+        resultsDiv.style.color = ""; // Reset color
+        resultsDiv.style.textAlign = ""; // Reset alignment
+    }
+
+    if (!startTime) startTime = new Date(); // Start timer when typing begins
+
+    if (input === "Backspace") {
+        // Handle the Backspace key
+        if (totalTypedChars > 0) {
+            totalTypedChars--; // Move the cursor one character back
+
+            const charSpan = document.getElementById(`char${totalTypedChars}`);
+            charSpan.classList.remove("correct", "incorrect");
+
+            // Reset the span style after removing classes
+            charSpan.style.backgroundColor = ""; // Clear background color
+            charSpan.style.color = ""; // Reset text color
+
+            // Update the image to the previous character
+            const previousChar = correctLine[totalTypedChars];
+            updateImage(previousChar);
+        }
+    } else if (input === "Enter") {
+        // Handle Enter key
+        event.preventDefault(); // Prevent default behavior
+
+        // Check if user has completed typing the current passage
+        if (totalTypedChars < correctLine.length) {
+            resultsDiv.style.fontSize = "150%";
+            resultsDiv.style.textAlign = "center";
+            resultsDiv.style.color = "red";
+            resultsDiv.innerHTML = "⚠ Please complete the passage before pressing Enter.";
+            return; // Stop further execution
+        }
+
+        // If passage is completed, process further actions
+        calculateAccuracyAndWPM(); // Calculate metrics
+        checkLine(); // Manage line transitions or passage completion
+        if (currentLineIndex >= lessons[currentLessonIndex].length) {
+            updateImage('Enter'); // Show enter.gif only at the end of the passage
+        }
+    } else if (totalTypedChars < correctLine.length) {
+        const charSpan = document.getElementById(`char${totalTypedChars}`);
+        const currentChar = correctLine[totalTypedChars];
+
+        // Highlight correctness of the input
+        if (input === currentChar) {
+            charSpan.classList.add("correct");
+            correctChars++; // Increment correctChars for a correct input
+        } else {
+            charSpan.classList.add("incorrect");
+        }
+
+        totalTypedChars++;
+
+        // Update the next character image
+        const nextCharIndex = totalTypedChars;
+        if (nextCharIndex < correctLine.length) {
+            updateImage(correctLine[nextCharIndex]); // Show the next character's image
+        } else {
+            updateImage('Enter'); // Show enter.gif at the end of the line
+        }
+    }
+});
+
+  function calculateAccuracyAndWPM() {
+    const endTime = new Date();
+    const timeDiff = (endTime - startTime) / 1000 / 60; // Time in minutes
+
+    // Calculate accuracy
+    let accuracy = (correctChars / totalTypedChars) * 100;
+    accuracy = Math.min(accuracy, 100); // Cap at 100%
+
+    // Calculate WPM (Words Per Minute)
+    const wordsTyped = totalTypedChars / 5; // Assume 5 characters = 1 word
+    const wpm = wordsTyped / timeDiff;
+
+    // Update scores
+    accuracyScores.push(Math.round(accuracy));
+    wpmScores.push(Math.round(wpm));
+
+    // Reset values for the next round
+    correctChars = 0;
+    totalTypedChars = 0;
+    startTime = new Date();
+}
+
+
+function checkLine() {
+    if (currentLineIndex < lessons[currentLessonIndex].length) {
+        currentLineIndex++; // Move to the next line
+        if (currentLineIndex >= lessons[currentLessonIndex].length) {
+            // End of the passage
+            finishTyping();
+            updateImage('Enter'); // Show enter.gif only at the end of the passage
+        } else {
+            showLine(); // Load the next line and update the image correctly
+        }
+    }
+}
+
+
+
+
+function finishTyping() {
+    const averageAccuracy = accuracyScores.reduce((a, b) => a + b, 0) / accuracyScores.length;
+    const averageWPM = wpmScores.reduce((a, b) => a + b, 0) / wpmScores.length;
+
+    // Display the results as usual
+    dynamicImage.src = ""; // Clear the image source
+    dynamicImage.style.display = "none"; // Hide the image element
+
+    if (isNaN(averageAccuracy) || isNaN(averageWPM)) {
+        resultsDiv.style.fontSize = "150%";
+        resultsDiv.style.textAlign = "center";
+        resultsDiv.style.color = "#FFA07A";
+        resultsDiv.innerHTML = `
+            Please repeat the lesson, and do not press enter until you reach the end of each passage.
+        `;
+    } else {
+        resultsDiv.style.fontSize = "175%";
+        resultsDiv.style.textAlign = "center";
+        resultsDiv.style.color = "#0033A0";
+        resultsDiv.innerHTML = `
+            Typing Complete!<br>
+            Average Words per Minute (WPM): ${Math.round(averageWPM)}<br>
+            Average Accuracy: ${Math.round(averageAccuracy)}%
+        `;
+
+        // Send WPM and accuracy to the server
+        sendResultsToServer(Math.round(averageWPM), Math.round(averageAccuracy));
+    
+
+
+// Function to send results to the server via AJAX
+function sendResultsToServer(wpm, accuracy) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "save_results.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Prepare the data to send
+    const params = `wpm=${wpm}&accuracy=${accuracy}`;
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log("Results saved successfully!");
+            } else {
+                console.error("Failed to save results.");
+            }
+        }
+    };
+    xhr.send(params);
+}
+
+        // Create a container for the button
+        const buttonContainer = document.createElement("div");
+        buttonContainer.style.textAlign = "center"; // Center the button
+        buttonContainer.style.marginTop = "30px"; // Add space above the button
+
+        // Add the "Take Speed Test" button
+        const speedTestButton = document.createElement("button");
+        speedTestButton.textContent = "Take Speed Test"; // Button label
+        speedTestButton.style.padding = "15px 30px"; // Make the button larger
+        speedTestButton.style.fontSize = "18px"; // Increase button font size
+        speedTestButton.style.backgroundColor = "#FFA500"; // Button background color
+        speedTestButton.style.color = "white"; // Button text color
+        speedTestButton.style.border = "none"; // Remove border
+        speedTestButton.style.borderRadius = "8px"; // More rounded corners
+        speedTestButton.style.cursor = "pointer"; // Pointer cursor on hover
+
+        // Add click event to the button to navigate to L4SpeedTest.php
+        speedTestButton.onclick = function () {
+            window.location.href = "L12SpeedTest.html"; // Navigate to L4SpeedTest.php
+        };
+
+        // Append the button to the container
+        buttonContainer.appendChild(speedTestButton);
+
+        // Append the container below the result text
+        resultsDiv.appendChild(buttonContainer);
+    }
+}
+
+
+
+
+  function restart() {
+    currentLineIndex = 0;
+    startTime = null;
+    totalTypedChars = 0;
+    correctChars = 0;
+    accuracyScores = [];
+    wpmScores = [];
+    resultsDiv.innerHTML = ""; // Clear the results display
+
+    // Ensure the image reappears and matches the first character of the lesson
+    dynamicImage.style.display = "block"; // Make the image element visible
+    const firstChar = lessons[currentLessonIndex][0][0]; // First character of the first line
+    updateImage(firstChar); // Update the image to the first character
+
+    showLine(); // Reset the text to the first line
+}
+
+
+  function previousLesson() {
+    window.location.href = 'lesson11.html';
+  }
+
+  function nextLesson() {
+    window.location.href = 'lesson13.html';
+  }
+
+  function adjustFontSize(change) {
+    currentFontSize += change;
+    paragraphDiv.style.fontSize = `${currentFontSize}px`;
+  }
+
+  function maintainFocus() {
+    setTimeout(() => paragraphDiv.focus(), 0);
+  }
+function toggleImageVisibility() {
+    const dynamicImage = document.getElementById("dynamic-image");
+
+    // Check current display state and toggle visibility
+    if (dynamicImage.style.display === "none") {
+        dynamicImage.style.display = "block"; // Show the image
+    } else {
+        dynamicImage.style.display = "none"; // Hide the image
+    }
+}
+
+const toggleImageButton = document.querySelector("button[onclick='toggleImageVisibility()']"); // Select the button
+
+toggleImageButton.addEventListener("keydown", function (event) {
+    if (event.key === " ") {
+        // Prevent the default action for the spacebar
+        event.preventDefault();
+    }
+});
+  showLine();
+</script>
+
+</body>
+</html>
